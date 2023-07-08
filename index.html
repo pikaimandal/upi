@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Generator</title>
+    <style>
+        .container {
+            width: 300px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        input[type="number"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        .message {
+            color: red;
+            margin-bottom: 10px;
+        }
+        #qr-container {
+            margin-top: 20px;
+        }
+        #qr-code {
+            display: none;
+        }
+        #error-message {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="number" id="recharge-amount" placeholder="Recharge Amount (30 - 30000)">
+        <br>
+        <button id="generate-qr-btn" onclick="generateQRCode()">Show UPI QR</button>
+        <br>
+        <div id="error-message"></div>
+        <div id="qr-container">
+            <img id="qr-code" src="" alt="QR Code">
+        </div>
+    </div>
+    <script>
+        function generateQRCode() {
+            var rechargeAmount = document.getElementById("recharge-amount").value;
+
+            // Validate input
+            if (rechargeAmount === "") {
+                document.getElementById("error-message").textContent = "Please Enter Recharge Amount";
+                return;
+            } else if (isNaN(rechargeAmount)) {
+                document.getElementById("error-message").textContent = "Please Enter Only Numbers!";
+                return;
+            } else if (rechargeAmount < 30) {
+                document.getElementById("error-message").textContent = "Minimum Recharge Amount is Rs. 30";
+                return;
+            } else if (rechargeAmount > 30000) {
+                document.getElementById("error-message").textContent = "Recharge of more than Rs. 30,000 is not allowed!";
+                return;
+            }
+
+            document.getElementById("error-message").textContent = "";
+            
+            // Generate URL with updated recharge amount
+            var url = "upi://pay?pa=pikait@upi&pn=Pikai Mandal&am=" + rechargeAmount + "&tn=Recharge&cu=INR";
+
+            // Generate QR code and display
+            var qrCode = new QRCode(document.getElementById("qr-code"), {
+                text: url,
+                width: 128,
+                height: 128
+            });
+
+            document.getElementById("qr-container").style.display = "block";
+        }
+    </script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+</body>
+</html>
