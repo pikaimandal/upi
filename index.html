@@ -36,9 +36,10 @@
         <br>
         <div id="error-message"></div>
         <div id="qr-container">
-            <img id="qr-code" src="" alt="QR Code">
+            <canvas id="qr-code"></canvas>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
     <script>
         function generateQRCode() {
             var rechargeAmount = document.getElementById("recharge-amount").value;
@@ -59,20 +60,19 @@
             }
 
             document.getElementById("error-message").textContent = "";
-            
+
             // Generate URL with updated recharge amount
-            var url = "upi://pay?pa=pikait@upi&pn=Pikai Mandal&am=" + rechargeAmount + "&tn=Recharge&cu=INR";
+            var url = "upi://pay?pa=pikai@upi&pn=Pikai Mandal&am=" + rechargeAmount + "&tn=Recharge&cu=INR";
 
             // Generate QR code and display
-            var qrCode = new QRCode(document.getElementById("qr-code"), {
-                text: url,
-                width: 128,
-                height: 128
+            var qr = new QRious({
+                element: document.getElementById("qr-code"),
+                value: url,
+                size: 128
             });
 
-            document.getElementById("qr-container").style.display = "block";
+            document.getElementById("qr-code").style.display = "block";
         }
     </script>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 </body>
 </html>
